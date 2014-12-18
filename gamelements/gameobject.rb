@@ -38,7 +38,7 @@ module RFlappy
       end
 
       def draw
-        draw_image(dims.x - dims.width_half, dims.y - dims.height_half)
+        draw_itself(dims.x - dims.width_half, dims.y - dims.height_half)
       end
     end
   end

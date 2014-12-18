@@ -1,24 +1,36 @@
 require 'rubygems'
 require 'gosu'
+
+# Own classes
 require_relative 'gamelements/bird'
+require_relative 'gamelements/pipe'
 
 module RFlappy
   class Game < Gosu::Window
+    attr_reader :width, :height
+
     def initialize
-      super(1280, 846, false)
+      @width, @height = 1280, 864
+
+      super(@width, @height, false)
       self.caption = 'Flappy Bird AI'
 
-      RFlappy::World.window = self
+      RFlappy::World.game = self
 
       @background = Gosu::Image.new(self, 'media/bg.png')
-      @bird = RFlappy::GameElements::Bird.new
+
+      @birds = [ RFlappy::GameElements::Bird.new ]
+      @pipes = [ RFlappy::GameElements::Pipe.new ]
+
+      @all = [ @birds, @pipes ]
 
       @last_milliseconds = 0
     end
 
     def draw
       @background.draw(0, 0, 0)
-      @bird.draw
+
+      @all.each { | group | group.each { | object | object.draw } }
     end
 
     # this is a callback for key up events or equivalent (there are
@@ -28,7 +40,7 @@ module RFlappy
     end
 
     def button_down(key)
-      @bird.jump if key == Gosu::KbSpace
+      @birds[0].jump if key == Gosu::KbSpace
     end
 
 
@@ -37,7 +49,7 @@ module RFlappy
       # with a delta we need to express the speed of our entities in
       # terms of pixels/second
 
-      @bird.update(@delta)
+      @all.each { | group | group.each { | object | object.update(@delta) } }
     end
 
     def update_delta

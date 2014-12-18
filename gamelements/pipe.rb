@@ -7,35 +7,33 @@ require_relative 'draw/image'
 
 module RFlappy
   module GameElements
-    class Bird < GameObject
+    class Pipe < GameObject
+      attr_reader :destroy_flag
+
       include RFlappy::GameElements::Velocity
-      include RFlappy::GameElements::Gravity
       include RFlappy::GameElements::Draw::Image
 
+      def x_spawn
+        RFlappy::World.game.width + dims.width_half
+      end
+
       def initialize
-        super(RFlappy::GameElements::Dimensions.new(100,0,68,48))
+        super(RFlappy::GameElements::Dimensions.new(0,0,104,400))
+        dims.x = x_spawn
 
         init_velocity
-        init_gravity
-        init_image('media/bird.png')
-      end
+        init_image('media/pipe.png')
 
-      def rotation_angle
-        rot_angle = @y_velocity * 0.08
-        [ [ rot_angle, 90 ].min, -90 ].max
-      end
-
-      def jump
-        @y_velocity = RFlappy::World.jump_velocity
+        @destroy_flag = false
       end
 
       def draw_itself(x, y)
-        draw_image(x, y, rotation_angle)
+        draw_image(x, y)
       end
 
       def update(delta)
-        update_gravity(delta)
         update_velocity(delta)
+        @x_velocity = -RFlappy::World.speed
       end
     end
   end
