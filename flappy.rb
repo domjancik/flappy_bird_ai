@@ -10,13 +10,17 @@ module RFlappy
   class Game < Gosu::Window
     attr_reader :width, :height, :pipes
 
+    def world
+      RFlappy::World
+    end
+
     def initialize
       @width, @height = 1280, 864
 
       super(@width, @height, false)
       self.caption = 'Flappy Bird AI'
 
-      RFlappy::World.game = self
+      world.game = self
 
       @background = Gosu::Image.new(self, 'media/bg.png')
 
@@ -26,7 +30,6 @@ module RFlappy
       @time_to_pipe = 0
 
       @last_milliseconds = 0
-
     end
 
     def draw
@@ -43,8 +46,9 @@ module RFlappy
 
     def button_down(key)
       @birds[0].jump if key == Gosu::KbSpace
+      world.pipe_hole_size += 50 if key == Gosu::KbUp
+      world.pipe_hole_size = [0, world.pipe_hole_size - 50].max if key == Gosu::KbDown
     end
-
 
     def update
       self.update_delta
@@ -68,12 +72,14 @@ module RFlappy
 
     # Object creation
     def spawn_pipe
+      hole_height_offset = (rand world.pipe_hole_leeway) - world.pipe_hole_leeway / 2
+
       @pipes.push RFlappy::GameElements::GameObjectGroup.new(
-          RFlappy::GameElements::Pipe.new,
-          RFlappy::GameElements::Pipe.new(:top)
+          RFlappy::GameElements::Pipe.new(hole_height_offset),
+          RFlappy::GameElements::Pipe.new(hole_height_offset, :top)
       )
 
-      @time_to_pipe = RFlappy::World.delay_between_pipes
+      @time_to_pipe = world.delay_between_pipes
     end
   end
 

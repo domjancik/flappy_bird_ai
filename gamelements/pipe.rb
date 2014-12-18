@@ -18,16 +18,17 @@ module RFlappy
       end
 
       def y_spawn(hole_height_offset, variant)
-        center_offset = world.pipe_hole_height / 2 + dims.height / 2
+        center_offset = world.pipe_hole_size / 2 + dims.height / 2
         center = game.height * 0.5 + hole_height_offset
         variant == :bottom ? center + center_offset : center - center_offset
       end
 
-      # @param [Fixnum] center_height
+      # @param [Fixnum] hole_height_offset
       # @param [Symbol] variant :top or :bottom
-      def initialize(variant = :bottom, hole_height_offset = 0)
-        super(RFlappy::GameElements::Dimensions.new(0,0,104,400))
+      def initialize(hole_height_offset, variant = :bottom)
+        super(RFlappy::GameElements::Dimensions.new(0,0,104,800))
         dims.x = x_spawn
+
         dims.y = y_spawn(hole_height_offset, variant)
 
         init_velocity
