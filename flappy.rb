@@ -22,11 +22,11 @@ module RFlappy
 
       @birds = [ RFlappy::GameElements::Bird.new ]
       @pipes = []
-      spawn_pipe
-
       @all = [ @birds, @pipes ]
+      @time_to_pipe = 0
 
       @last_milliseconds = 0
+
     end
 
     def draw
@@ -52,6 +52,9 @@ module RFlappy
       # terms of pixels/second
 
       @all.each { | group | group.each { | object | object.update(@delta) } }
+
+      @time_to_pipe -= @delta
+      spawn_pipe if @time_to_pipe <= 0
     end
 
     def update_delta
@@ -69,6 +72,8 @@ module RFlappy
           RFlappy::GameElements::Pipe.new,
           RFlappy::GameElements::Pipe.new(:top)
       )
+
+      @time_to_pipe = RFlappy::World.delay_between_pipes
     end
   end
 

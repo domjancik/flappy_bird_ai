@@ -13,7 +13,7 @@ module RFlappy
     @jump_velocity = -500
     @speed = 400
     @pipe_hole_height = 300
-    @delay_between_pipes = 4 #in secs
+    @delay_between_pipes = 1 #in secs
 
     @game = nil
   end
