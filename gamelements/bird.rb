@@ -14,6 +14,7 @@ module RFlappy
 
       def initialize
         super(RFlappy::GameElements::Dimensions.new(100,0,68,48))
+        die
 
         init_velocity
         init_gravity
@@ -53,7 +54,7 @@ module RFlappy
       end
 
       def respawn
-        @y_velocity, @dims.y = 0, 0
+        @y_velocity, @dims.y = 0, 300
       end
     end
   end
