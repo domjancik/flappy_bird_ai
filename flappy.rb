@@ -7,7 +7,7 @@ require_relative 'gamelements/pipe'
 
 module RFlappy
   class Game < Gosu::Window
-    attr_reader :width, :height
+    attr_reader :width, :height, :pipes
 
     def initialize
       @width, @height = 1280, 864

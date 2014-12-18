@@ -36,6 +36,24 @@ module RFlappy
       def update(delta)
         update_gravity(delta)
         update_velocity(delta)
+        collide_with_pipes
+      end
+
+      def collide_with_pipes
+        RFlappy::World.game.pipes.each { |pipe| die if pipe.collides?(self) }
+      end
+
+      def die
+        reset_score
+        respawn
+      end
+
+      def reset_score
+        @score = 0
+      end
+
+      def respawn
+        @y_velocity, @dims.y = 0, 0
       end
     end
   end
