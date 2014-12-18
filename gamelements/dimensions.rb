@@ -22,14 +22,14 @@ module RFlappy
 
       # @param [Fixnum] width
       # @return [Fixnum]
-      def width(width)
+      def width=(width)
         @width = width
         @width_half = @width / 2
       end
 
       # @param [Fixnum] height
       # @return [Fixnum]
-      def height(height)
+      def height=(height)
         @height = height
         @height_half = @height / 2
       end

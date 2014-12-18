@@ -40,6 +40,14 @@ module RFlappy
       def draw
         draw_itself(dims.x - dims.width_half, dims.y - dims.height_half)
       end
+
+      def world
+        RFlappy::World
+      end
+
+      def game
+        world.game
+      end
     end
   end
 end

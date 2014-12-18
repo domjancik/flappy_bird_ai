@@ -20,7 +20,10 @@ module RFlappy
       @background = Gosu::Image.new(self, 'media/bg.png')
 
       @birds = [ RFlappy::GameElements::Bird.new ]
-      @pipes = [ RFlappy::GameElements::Pipe.new ]
+      @pipes = [
+          RFlappy::GameElements::Pipe.new,
+          RFlappy::GameElements::Pipe.new(:top)
+      ]
 
       @all = [ @birds, @pipes ]
 
