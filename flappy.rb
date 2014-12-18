@@ -4,6 +4,7 @@ require 'gosu'
 # Own classes
 require_relative 'gamelements/bird'
 require_relative 'gamelements/pipe'
+require_relative 'gamelements/game_object_group'
 
 module RFlappy
   class Game < Gosu::Window
@@ -20,10 +21,8 @@ module RFlappy
       @background = Gosu::Image.new(self, 'media/bg.png')
 
       @birds = [ RFlappy::GameElements::Bird.new ]
-      @pipes = [
-          RFlappy::GameElements::Pipe.new,
-          RFlappy::GameElements::Pipe.new(:top)
-      ]
+      @pipes = []
+      spawn_pipe
 
       @all = [ @birds, @pipes ]
 
@@ -62,6 +61,14 @@ module RFlappy
       # clamping here is important to avoid strange behaviors
       @delta = [current_time - @last_milliseconds, 0.25].min
       @last_milliseconds = current_time
+    end
+
+    # Object creation
+    def spawn_pipe
+      @pipes.push RFlappy::GameElements::GameObjectGroup.new(
+          RFlappy::GameElements::Pipe.new,
+          RFlappy::GameElements::Pipe.new(:top)
+      )
     end
   end
 
