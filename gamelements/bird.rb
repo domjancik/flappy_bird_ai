@@ -13,7 +13,7 @@ module RFlappy
       include RFlappy::GameElements::Draw::Image
 
       def initialize
-        super(RFlappy::GameElements::Dimensions.new(100,0,50,50));
+        super(RFlappy::GameElements::Dimensions.new(100,0,68,48))
 
         init_velocity
         init_gravity
@@ -30,7 +30,7 @@ module RFlappy
       end
 
       def draw_itself(x, y)
-        RFlappy::World.window.rotate(rotation_angle, @dims.x, @dims.y) {
+        RFlappy::World.game.rotate(rotation_angle, @dims.x, @dims.y) {
           draw_image(x, y)
         }
       end
