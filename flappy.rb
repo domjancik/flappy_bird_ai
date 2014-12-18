@@ -55,10 +55,12 @@ module RFlappy
       # with a delta we need to express the speed of our entities in
       # terms of pixels/second
 
-      @all.each { | group | group.each { | object | object.update(@delta) } }
+      @all.each { |group| group.each { |object| object.update(@delta) } }
 
       @time_to_pipe -= @delta
       spawn_pipe if @time_to_pipe <= 0
+
+      @pipes.delete_if { |pipe| pipe.destroy? }
     end
 
     def update_delta

@@ -7,6 +7,11 @@ module RFlappy
       # @param [RFlappy::Dimensions] dimensions
       def initialize(dimensions)
         @dims = dimensions
+        @destroy_flag = false
+      end
+
+      def destroy?
+        @destroy_flag
       end
 
       # @param [Fixnum] a_min

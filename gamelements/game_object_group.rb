@@ -23,6 +23,10 @@ module RFlappy
       def overlaps_horizontally?(other_object)
         @objects.inject(false) { |collided, object| collided || object.overlaps_horizontally?(other_object) }
       end
+
+      def destroy?
+        @objects.inject(true) { |destroy, object| destroy && object.destroy? }
+      end
     end
   end
 end

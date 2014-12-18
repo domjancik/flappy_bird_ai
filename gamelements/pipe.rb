@@ -34,7 +34,6 @@ module RFlappy
         init_velocity
         init_image('media/pipe.png')
 
-        @destroy_flag = false
         @rotation = variant == :bottom ? 0 : 180
       end
 
@@ -45,6 +44,7 @@ module RFlappy
       def update(delta)
         update_velocity(delta)
         @x_velocity = -world.speed
+        @destroy_flag = true if dims.x < 0 - dims.width_half
       end
     end
   end

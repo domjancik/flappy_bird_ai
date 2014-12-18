@@ -28,8 +28,6 @@ module RFlappy
 
       def jump
         @y_velocity = RFlappy::World.jump_velocity
-
-        p @score
       end
 
       def draw_itself(x, y)
