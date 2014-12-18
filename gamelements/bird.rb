@@ -28,6 +28,8 @@ module RFlappy
 
       def jump
         @y_velocity = RFlappy::World.jump_velocity
+
+        p @score
       end
 
       def draw_itself(x, y)
@@ -36,12 +38,23 @@ module RFlappy
 
       def update(delta)
         update_gravity(delta)
+
+        @score += 1 if @in_pipes_before_movement && !in_pipes?
+        @in_pipes_before_movement = in_pipes?
+
         update_velocity(delta)
+
+        @distance += world.speed * delta
+
         collide_with_pipes
       end
 
+      def in_pipes?
+        game.pipes.inject(false) { |collided, pipe| collided || pipe.overlaps_horizontally?(self) }
+      end
+
       def collide_with_pipes
-        RFlappy::World.game.pipes.each { |pipe| die if pipe.collides?(self) }
+        game.pipes.each { |pipe| die if pipe.collides?(self) }
       end
 
       def die
@@ -50,7 +63,9 @@ module RFlappy
       end
 
       def reset_score
+        @distance = 0
         @score = 0
+        @in_pipes_before_movement = false
       end
 
       def respawn

@@ -14,8 +14,14 @@ module RFlappy
         @objects.each { |object| object.update(delta) }
       end
 
+      # @param [RFlappy::GameElements::GameObject] other_object
       def collides?(other_object)
         @objects.inject(false) { |collided, object| collided || object.collides?(other_object) }
+      end
+
+      # @param [RFlappy::GameElements::GameObject] other_object
+      def overlaps_horizontally?(other_object)
+        @objects.inject(false) { |collided, object| collided || object.overlaps_horizontally?(other_object) }
       end
     end
   end
