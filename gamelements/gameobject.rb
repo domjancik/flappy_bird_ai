@@ -33,7 +33,7 @@ module RFlappy
         overlaps_horizontally?(another_object) && overlaps_vertically?(another_object)
       end
 
-      def draw_image(x, y)
+      def draw_itself(x, y)
         # Needs to be implemented in subclasses to draw anything
       end
 

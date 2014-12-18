@@ -3,19 +3,21 @@ require_relative 'gameobject'
 require_relative 'dimensions'
 require_relative 'gravity'
 require_relative 'velocity'
+require_relative 'draw/image'
 
 module RFlappy
   module GameElements
     class Bird < GameObject
       include RFlappy::GameElements::Velocity
       include RFlappy::GameElements::Gravity
+      include RFlappy::GameElements::Draw::Image
 
       def initialize
-        @image = Gosu::Image.new(RFlappy::World.window, 'media/bird.png')
         super(RFlappy::GameElements::Dimensions.new(100,0,50,50));
 
         init_velocity
         init_gravity
+        init_image('media/bird.png')
       end
 
       def rotation_angle
@@ -23,14 +25,14 @@ module RFlappy
         [ [ rot_angle, 90 ].min, -90 ].max
       end
 
-      def draw_image(x, y)
-        RFlappy::World.window.rotate(rotation_angle, @dims.x, @dims.y) {
-          @image.draw(x, y, 0);
-        }
-      end
-
       def jump
         @y_velocity = RFlappy::World.jump_velocity
+      end
+
+      def draw_itself(x, y)
+        RFlappy::World.window.rotate(rotation_angle, @dims.x, @dims.y) {
+          draw_image(x, y)
+        }
       end
 
       def update(delta)

@@ -1,15 +1,19 @@
-require_relative '../world'
+require_relative '../../world'
 
 module RFlappy
   module GameElements
-    # Can be used to add gravity effects to objects with Velocity
-    module Gravity
-      def init_gravity
+    module Draw
+      # Adds drawing capabilities to GameObjects
+      module Image
+        def init_image(image_path)
+          @image = Gosu::Image.new(RFlappy::World.window, image_path)
+        end
 
-      end
-
-      def update_gravity(delta)
-        @y_velocity += World.gravity * delta
+        def draw_image(x, y)
+          RFlappy::World.window.rotate(rotation_angle, @dims.x, @dims.y) {
+            @image.draw(x, y, 0);
+          }
+        end
       end
     end
   end
