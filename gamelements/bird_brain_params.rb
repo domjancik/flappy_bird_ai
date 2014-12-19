@@ -12,7 +12,7 @@ module RFlappy
       JUMP_DELAY_INTERVAL = Interval.new(0, 2)
 
       def rand_interval(interval)
-        RFlappy::Generator.rand_interval(interval)
+        RFlappy::RandomHelper.rand_interval(interval)
       end
 
       def init_random_params

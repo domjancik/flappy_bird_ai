@@ -2,7 +2,7 @@ require_relative 'interval'
 
 module RFlappy
   # Generator
-  class Generator
+  class RandomHelper
     def self.rand_from_to(from, to)
       interval = to - from
       Random::rand * interval + from
