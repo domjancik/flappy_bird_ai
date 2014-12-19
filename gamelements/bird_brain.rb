@@ -7,8 +7,9 @@ module RFlappy
       @@best = nil
 
       # @param [RFlappy::GameElements::Bird] bird_to_control
-      def initialize(bird_to_control)
+      def initialize(bird_to_control, id)
         @bird = bird_to_control
+        @id = id
         @best = nil
 
         @params = RFlappy::GameElements::BirdBrainParams.new(:random)
@@ -36,12 +37,12 @@ module RFlappy
       end
 
       def should_flap?
-        @time_to_flap < 0 && below_target?
+        @time_to_flap <= 0 && below_target?
         # TODO target aim, etc.
       end
 
       def should_iterate_pso?
-        @time_to_pso < 0
+        @time_to_pso <= 0
       end
 
       def flap
@@ -53,6 +54,9 @@ module RFlappy
         @time_to_flap -= delta
         @time_to_pso -= delta
 
+        @time_to_flap = [0, @time_to_flap].max
+        @time_to_pso = [0, @time_to_pso].max
+
         flap if should_flap?
         iterate_pso if should_iterate_pso?
 
@@ -61,6 +65,14 @@ module RFlappy
 
       def draw
         # TODO draw lines representing target, threshold, etc.
+        font.draw(@id.to_s, @bird.dims.x, @bird.dims.y - 70, 0)
+        target_line_x = @bird.dims.x + 50 * @id
+        game.draw_line(@bird.dims.x, @bird.dims.y, Gosu::Color::WHITE, target_line_x, @params.height_target, Gosu::Color::RED)
+        game.draw_line(target_line_x, @params.height_target, Gosu::Color::RED, target_line_x + 50, @params.height_target, Gosu::Color::RED)
+        game.draw_line(target_line_x, @params.height_target, Gosu::Color::RED, target_line_x, @params.height_target + @params.target_threshold, Gosu::Color::RED)
+
+        game.draw_line(target_line_x, @params.height_target + 10, Gosu::Color::WHITE, target_line_x + @params.jump_delay * 20, @params.height_target + 10, Gosu::Color::WHITE)
+        game.draw_line(target_line_x, @params.height_target + 10, Gosu::Color::BLACK, target_line_x + @time_to_flap * 20, @params.height_target + 10, Gosu::Color::BLACK)
       end
 
       def fitness
@@ -96,6 +108,16 @@ module RFlappy
 
       def world
         RFlappy::World
+      end
+
+      # @return [Gosu::Font]
+      def font
+        game.font
+      end
+
+      # @return [RFlappy::Game]
+      def game
+        RFlappy::World.game
       end
     end
   end

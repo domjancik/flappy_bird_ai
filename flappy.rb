@@ -9,7 +9,7 @@ require_relative 'gamelements/game_object_group'
 
 module RFlappy
   class Game < Gosu::Window
-    attr_reader :width, :height, :pipes
+    attr_reader :width, :height, :pipes, :font
 
     def world
       RFlappy::World
@@ -32,6 +32,8 @@ module RFlappy
       @time_to_pipe = 0
 
       @last_milliseconds = 0
+
+      @font = Gosu::Font.new(self, 'Arial', 20)
 
       spawn_ai_bird
     end
@@ -91,7 +93,7 @@ module RFlappy
 
     def spawn_ai_bird
       bird = RFlappy::GameElements::Bird.new
-      bird_ai = RFlappy::GameElements::BirdBrain.new bird
+      bird_ai = RFlappy::GameElements::BirdBrain.new bird, @bird_ais.size
 
       bird.image_alpha = 128
 
