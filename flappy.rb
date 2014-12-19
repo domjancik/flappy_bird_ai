@@ -35,7 +35,7 @@ module RFlappy
 
       @font = Gosu::Font.new(self, 'Arial', 20)
 
-      spawn_ai_bird
+      (0..20).each { spawn_ai_bird }
     end
 
     def draw

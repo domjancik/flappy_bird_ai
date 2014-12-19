@@ -6,6 +6,8 @@ module RFlappy
     class BirdBrain
       @@best = nil
 
+      ZERO_PARAMS = RFlappy::GameElements::BirdBrainParams::ZERO
+
       # @param [RFlappy::GameElements::Bird] bird_to_control
       def initialize(bird_to_control, id)
         @bird = bird_to_control
@@ -76,7 +78,10 @@ module RFlappy
       end
 
       def fitness
-        @bird.distance
+        #@bird.distance
+        0 if @bird.score < 2
+
+        @bird.score
       end
 
       # @return [RFlappy::GameElements::BirdBrainClassifiedParams]
@@ -86,6 +91,9 @@ module RFlappy
 
       def update_best!
         cur_params = classified_params
+
+        return if fitness <= 0
+
         @best = cur_params if cur_params > @best
         @@best = @best if @best > @@best
       end
@@ -95,8 +103,8 @@ module RFlappy
         beta = RFlappy::RandomHelper.rand_interval(RFlappy::Interval::ZERO_ONE)
 
         inertia_part = @velocity * world.pso_inertia
-        local_best_part = @best.nil? ? 0 : (@best.params - @params) * alpha * world.pso_local_best_influence
-        global_best_part = @@best.nil? ? 0 : (@@best.params - @params) * beta * world.pso_global_best_influence
+        local_best_part = @best.nil? ? ZERO_PARAMS : (@best.params - @params) * alpha * world.pso_local_best_influence
+        global_best_part = @@best.nil? ? ZERO_PARAMS : (@@best.params - @params) * beta * world.pso_global_best_influence
 
         @velocity = inertia_part + local_best_part + global_best_part
 

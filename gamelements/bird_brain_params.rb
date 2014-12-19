@@ -75,6 +75,8 @@ module RFlappy
 
         RFlappy::GameElements::BirdBrainParams.new(:supplied, modified_params)
       end
+
+      ZERO = RFlappy::GameElements::BirdBrainParams.new(:zero)
     end
   end
 end
