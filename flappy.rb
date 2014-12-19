@@ -52,6 +52,7 @@ module RFlappy
       @birds[0].flap if key == Gosu::KbSpace
       world.pipe_hole_size += 50 if key == Gosu::KbUp
       world.pipe_hole_size = [0, world.pipe_hole_size - 50].max if key == Gosu::KbDown
+      spawn_ai_bird if key == Gosu::KbQ
     end
 
     def update
