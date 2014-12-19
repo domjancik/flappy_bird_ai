@@ -1,5 +1,5 @@
 require_relative '../interval'
-require_relative '../generatora'
+require_relative '../random_helper'
 
 module RFlappy
   module GameElements
