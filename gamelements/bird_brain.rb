@@ -95,8 +95,8 @@ module RFlappy
         beta = RFlappy::RandomHelper.rand_interval(RFlappy::Interval::ZERO_ONE)
 
         inertia_part = @velocity * world.pso_inertia
-        local_best_part = @best.nil? ? 0 : @best.params - @params * alpha * world.pso_local_best_influence
-        global_best_part = @@best.nil? ? 0 : @@best.params - @params * beta * world.pso_global_best_influence
+        local_best_part = @best.nil? ? 0 : (@best.params - @params) * alpha * world.pso_local_best_influence
+        global_best_part = @@best.nil? ? 0 : (@@best.params - @params) * beta * world.pso_global_best_influence
 
         @velocity = inertia_part + local_best_part + global_best_part
 
