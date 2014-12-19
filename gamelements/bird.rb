@@ -1,5 +1,5 @@
 require 'gosu'
-require_relative 'gameobject'
+require_relative 'game_object'
 require_relative 'dimensions'
 require_relative 'gravity'
 require_relative 'velocity'
@@ -26,8 +26,8 @@ module RFlappy
         [ [ rot_angle, 90 ].min, -90 ].max
       end
 
-      def jump
-        @y_velocity = RFlappy::World.jump_velocity
+      def flap
+        @y_velocity = RFlappy::World.flap_velocity
       end
 
       def draw_itself(x, y)

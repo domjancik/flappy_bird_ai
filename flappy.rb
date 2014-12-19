@@ -3,6 +3,7 @@ require 'gosu'
 
 # Own classes
 require_relative 'gamelements/bird'
+require_relative 'gamelements/bird_brain'
 require_relative 'gamelements/pipe'
 require_relative 'gamelements/game_object_group'
 
@@ -25,11 +26,14 @@ module RFlappy
       @background = Gosu::Image.new(self, 'media/bg.png')
 
       @birds = [ RFlappy::GameElements::Bird.new ]
+      @bird_ais = []
       @pipes = []
-      @all = [ @birds, @pipes ]
+      @all = [ @birds, @pipes, @bird_ais ]
       @time_to_pipe = 0
 
       @last_milliseconds = 0
+
+      spawn_ai_bird
     end
 
     def draw
@@ -45,7 +49,7 @@ module RFlappy
     end
 
     def button_down(key)
-      @birds[0].jump if key == Gosu::KbSpace
+      @birds[0].flap if key == Gosu::KbSpace
       world.pipe_hole_size += 50 if key == Gosu::KbUp
       world.pipe_hole_size = [0, world.pipe_hole_size - 50].max if key == Gosu::KbDown
     end
@@ -82,6 +86,14 @@ module RFlappy
       )
 
       @time_to_pipe = world.delay_between_pipes
+    end
+
+    def spawn_ai_bird
+      bird = RFlappy::GameElements::Bird.new
+      bird_ai = RFlappy::GameElements::BirdBrain.new bird
+
+      @birds.push bird
+      @bird_ais.push bird_ai
     end
   end
 

@@ -1,5 +1,5 @@
 require 'gosu'
-require_relative 'gameobject'
+require_relative 'game_object'
 require_relative 'dimensions'
 require_relative 'gravity'
 require_relative 'velocity'
