@@ -9,7 +9,7 @@ require_relative 'gamelements/game_object_group'
 
 module RFlappy
   class Game < Gosu::Window
-    attr_reader :width, :height, :pipes, :font
+    attr_reader :width, :height, :pipes, :font, :total_fitness, :bird_ais
 
     def world
       RFlappy::World
@@ -25,13 +25,16 @@ module RFlappy
 
       @background = Gosu::Image.new(self, 'media/bg.png')
 
-      @birds = [ RFlappy::GameElements::Bird.new ]
+      @birds = []#[ RFlappy::GameElements::Bird.new ]
       @bird_ais = []
       @pipes = []
       @all = [ @birds, @pipes, @bird_ais ]
       @time_to_pipe = 0
 
       @last_milliseconds = 0
+
+      @max_score = 0
+      @total_fitness = 0
 
       @font = Gosu::Font.new(self, 'Arial', 20)
 
@@ -42,6 +45,8 @@ module RFlappy
       @background.draw(0, 0, 0)
 
       @all.each { | group | group.each { | object | object.draw } }
+
+      font.draw('Max score ' + @max_score.to_s, 10, 10, 0)
     end
 
     # this is a callback for key up events or equivalent (there are
@@ -68,6 +73,9 @@ module RFlappy
       spawn_pipe if @time_to_pipe <= 0
 
       @pipes.delete_if { |pipe| pipe.destroy? }
+
+      @max_score = @birds.inject(0) { |val, bird| [val, bird.score].max }
+      @total_fitness = @bird_ais.inject(0) { |val, bird_ai| val + bird_ai.fitness }
     end
 
     def update_delta

@@ -1,4 +1,5 @@
 require_relative 'interval'
+require_relative 'world'
 
 module RFlappy
   # Generator
@@ -11,6 +12,10 @@ module RFlappy
     # @param [RFlappy::Interval] interval
     def self.rand_interval(interval)
       rand_from_to interval.from, interval.to
+    end
+
+    def self.rand_screen_height
+      rand_from_to 0, RFlappy::World.game.height
     end
   end
 end

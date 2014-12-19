@@ -21,7 +21,7 @@ module RFlappy
     @delay_between_pso = 0.25 #in secs
     @pso_inertia = 0.5
     @pso_local_best_influence = 0.25
-    @pso_global_best_influence = 0.45
+    @pso_global_best_influence = 0.25
 
     @game = nil
   end

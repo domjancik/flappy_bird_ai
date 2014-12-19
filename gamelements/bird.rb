@@ -4,6 +4,7 @@ require_relative 'dimensions'
 require_relative 'gravity'
 require_relative 'velocity'
 require_relative 'draw/image'
+require_relative '../random_helper'
 
 module RFlappy
   module GameElements
@@ -47,6 +48,7 @@ module RFlappy
         @distance += world.speed * delta
 
         collide_with_pipes
+        die if dims.y > game.height || dims.y < 0
       end
 
       def in_pipes?
@@ -69,7 +71,7 @@ module RFlappy
       end
 
       def respawn
-        @y_velocity, @dims.y = 0, 300
+        @y_velocity, @dims.y = 0, RFlappy::RandomHelper.rand_screen_height
       end
     end
   end

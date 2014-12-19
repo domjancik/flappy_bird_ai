@@ -27,6 +27,10 @@ module RFlappy
       def destroy?
         @objects.inject(true) { |destroy, object| destroy && object.destroy? }
       end
+
+      def dims
+        @objects[0].dims
+      end
     end
   end
 end
