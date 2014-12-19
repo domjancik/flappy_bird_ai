@@ -12,6 +12,8 @@ module RFlappy
       include RFlappy::GameElements::Gravity
       include RFlappy::GameElements::Draw::Image
 
+      attr_reader :distance, :score
+
       def initialize
         super(RFlappy::GameElements::Dimensions.new(100,0,68,48))
         die

@@ -8,5 +8,7 @@ module RFlappy
       @from = from
       @to = to
     end
+
+    ZERO_ONE = RFlappy::Interval.new(0, 1)
   end
 end

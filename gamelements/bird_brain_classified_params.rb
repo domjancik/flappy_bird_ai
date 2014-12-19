@@ -13,6 +13,7 @@ module RFlappy
       end
 
       def <=>(other)
+        return 1 if other.nil?
         @fitness <=> other.fitness
       end
     end
