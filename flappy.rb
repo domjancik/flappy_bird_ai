@@ -92,6 +92,8 @@ module RFlappy
       bird = RFlappy::GameElements::Bird.new
       bird_ai = RFlappy::GameElements::BirdBrain.new bird
 
+      bird.image_alpha = 128
+
       @birds.push bird
       @bird_ais.push bird_ai
     end
