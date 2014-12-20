@@ -200,7 +200,7 @@ module RFlappy
       end
 
       def distance_to_next_pipe
-        dist_to_pipe(next_pipe)
+        dist_to_pipe(next_pipe).abs
       end
 
       def world
