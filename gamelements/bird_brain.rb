@@ -39,8 +39,12 @@ module RFlappy
         # TODO parametrise the distance multiplier
       end
 
+      def target_height
+        next_pipe.y_center + @params.target_offset
+      end
+
       def below_target?
-        bird_y > @params.height_target + actual_target_threshold
+        bird_y > target_height + actual_target_threshold
         # TODO threshold has to be affected by speed otherwise it's just moving target
       end
 
@@ -75,14 +79,14 @@ module RFlappy
         # TODO draw lines representing target, threshold, etc.
         font.draw(@id.to_s, @bird.dims.x - 70, @bird.dims.y, 0)
         target_line_x = @bird.dims.x + 50 * (@id + 1)
-        game.draw_line(@bird.dims.x + 30, @bird.dims.y, Gosu::Color::WHITE, target_line_x, @params.height_target, Gosu::Color::RED)
-        game.draw_line(target_line_x, @params.height_target, Gosu::Color::RED, target_line_x + 50, @params.height_target, Gosu::Color::RED)
+        game.draw_line(@bird.dims.x + 30, @bird.dims.y, Gosu::Color::WHITE, target_line_x, target_height, Gosu::Color::RED)
+        game.draw_line(target_line_x, target_height, Gosu::Color::RED, target_line_x + 50, target_height, Gosu::Color::RED)
 
-        game.draw_line(target_line_x, @params.height_target, Gosu::Color::WHITE, target_line_x, @params.height_target + @params.target_threshold, Gosu::Color::WHITE)
-        game.draw_line(target_line_x, @params.height_target, Gosu::Color::BLACK, target_line_x, @params.height_target + actual_target_threshold, Gosu::Color::BLACK)
+        game.draw_line(target_line_x, target_height, Gosu::Color::WHITE, target_line_x, target_height + @params.target_threshold, Gosu::Color::WHITE)
+        game.draw_line(target_line_x, target_height, Gosu::Color::BLACK, target_line_x, target_height + actual_target_threshold, Gosu::Color::BLACK)
 
-        game.draw_line(target_line_x, @params.height_target + 10, Gosu::Color::WHITE, target_line_x + @params.jump_delay * 20, @params.height_target + 10, Gosu::Color::WHITE)
-        game.draw_line(target_line_x, @params.height_target + 10, Gosu::Color::BLACK, target_line_x + @time_to_flap * 20, @params.height_target + 10, Gosu::Color::BLACK)
+        game.draw_line(target_line_x, target_height + 10, Gosu::Color::WHITE, target_line_x + @params.jump_delay * 20, target_height + 10, Gosu::Color::WHITE)
+        game.draw_line(target_line_x, target_height + 10, Gosu::Color::BLACK, target_line_x + @time_to_flap * 20, target_height + 10, Gosu::Color::BLACK)
       end
 
       def fitness
@@ -141,13 +145,26 @@ module RFlappy
         update_transparency
       end
 
-      def distance_to_next_pipe
+      def dist_to_pipe(pipe)
+        pipe.dims.x - @bird.dims.x
+      end
+
+      def next_pipe
         min_dist_to_pipe = Float::INFINITY
+        pipe_with_min_dist = nil
         game.pipes.each do |pipe|
-          min_dist_to_pipe = [min_dist_to_pipe, pipe.dims.x - @bird.dims.x].min if pipe.dims.x > @bird.dims.x
+          pipe_dist = dist_to_pipe pipe
+          if pipe_with_min_dist.nil? || (pipe.dims.x > @bird.dims.x && pipe_dist < min_dist_to_pipe)
+            min_dist_to_pipe = pipe_dist
+            pipe_with_min_dist = pipe
+          end
         end
 
-        min_dist_to_pipe
+        pipe_with_min_dist
+      end
+
+      def distance_to_next_pipe
+        dist_to_pipe(next_pipe)
       end
 
       def world

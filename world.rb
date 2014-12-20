@@ -15,7 +15,7 @@ module RFlappy
     @flap_velocity = -500
     @speed = 400
     @pipe_hole_size = 300
-    @pipe_hole_leeway = 0#400
+    @pipe_hole_leeway = 400
     @delay_between_pipes = 1 #in secs
 
     @delay_between_pso = 0.25 #in secs

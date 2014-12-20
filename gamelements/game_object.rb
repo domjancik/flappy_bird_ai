@@ -53,6 +53,10 @@ module RFlappy
       def game
         world.game
       end
+
+      def y_center
+        dims.y
+      end
     end
   end
 end

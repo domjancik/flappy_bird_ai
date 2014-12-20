@@ -31,6 +31,13 @@ module RFlappy
       def dims
         @objects[0].dims
       end
+
+      def y_center
+        # y position sum
+        y_sum = @objects.inject(0) { |sum, object| sum + object.dims.y}
+        # average
+        y_sum.to_f / @objects.size.to_f
+      end
     end
   end
 end

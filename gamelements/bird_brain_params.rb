@@ -5,9 +5,11 @@ module RFlappy
   module GameElements
     class BirdBrainParams
       attr_reader :params
+      #attr_accessor :target_offset, :target_threshold, :jump_delay
 
       # Settings constants
-      TARGET_INTERVAL = Interval.new(0, 864)
+      TARGET_INTERVAL = Interval.new(-200, 200)
+      #TARGET_INTERVAL = Interval.new(0, 864)
       TARGET_THRESHOLD_INTERVAL = Interval.new(0, 200)
       JUMP_DELAY_INTERVAL = Interval.new(0, 2)
 
@@ -16,7 +18,7 @@ module RFlappy
       end
 
       def init_random_params
-        self.height_target = rand_interval(TARGET_INTERVAL) # aim of the bird
+        self.target_offset = rand_interval(TARGET_INTERVAL) # aim of the bird
         self.target_threshold = rand_interval(TARGET_THRESHOLD_INTERVAL) # distance from target before flapping
         self.jump_delay = rand_interval(JUMP_DELAY_INTERVAL) # min amount of secs to wait before next flap
         # Other possibilities
@@ -25,7 +27,7 @@ module RFlappy
       end
 
       def init_zero_params
-        self.height_target = 0
+        self.target_offset = 0
         self.target_threshold = 0
         self.jump_delay = 0
       end
