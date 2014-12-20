@@ -40,6 +40,8 @@ module RFlappy
         @params = RFlappy::GameElements::BirdBrainParams.new(:random)
         @velocity = RFlappy::GameElements::BirdBrainParams.new(:zero)
 
+        @target_height = 300
+
         reset_flap_delay
         reset_pso_delay
       end
@@ -66,8 +68,13 @@ module RFlappy
       end
 
       def target_height
+        @target_height
+      end
+
+      def update_target!
         pipe = next_pipe
-        pipe.nil? ? 400 + @params.target_offset : next_pipe.y_center + @params.target_offset
+        fin_target = pipe.nil? ? 400 + @params.target_offset : next_pipe.y_center + @params.target_offset
+        @target_height = @target_height * (1 - @params.retarget_speed) + fin_target * @params.retarget_speed
       end
 
       def below_target?
@@ -99,6 +106,7 @@ module RFlappy
         iterate_pso if should_iterate_pso?
 
         update_best!
+        update_target!
       end
 
       def actual_target_height

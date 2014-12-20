@@ -9,10 +9,10 @@ module RFlappy
 
       # Settings constants
       TARGET_INTERVAL = Interval.new(-200, 200)
-      #TARGET_INTERVAL = Interval.new(0, 864)
       TARGET_THRESHOLD_INTERVAL = Interval.new(0, 200)
       JUMP_DELAY_INTERVAL = Interval.new(0, 2)
       DIST_THRESH_MULT_INTERVAL = Interval.new(0.0001, 0.003)
+      RETARGET_SPEED_INTERVAL = Interval.new(0.1, 1)
 
       def rand_interval(interval)
         RFlappy::RandomHelper.rand_interval(interval)
@@ -22,7 +22,8 @@ module RFlappy
         self.target_offset = rand_interval(TARGET_INTERVAL) # aim of the bird
         self.target_threshold = rand_interval(TARGET_THRESHOLD_INTERVAL) # distance from target before flapping
         self.jump_delay = rand_interval(JUMP_DELAY_INTERVAL) # min amount of secs to wait before next flap
-        self.dist_thresh_mult = rand_interval(DIST_THRESH_MULT_INTERVAL) # min amount of secs to wait before next flap
+        self.dist_thresh_mult = rand_interval(DIST_THRESH_MULT_INTERVAL) # how quickly the threshold reduces based on the distance to next pipe
+        self.retarget_speed = rand_interval(RETARGET_SPEED_INTERVAL) # how quickly new targets are acquired
         # Other possibilities
         # - effect of the next pipe center on the height target
         # - y_velocity effects on the time of flapping
@@ -33,6 +34,7 @@ module RFlappy
         self.target_threshold = 0
         self.jump_delay = 0
         self.dist_thresh_mult = 0
+        self.retarget_speed = 0
       end
 
       # @param [Symbol] init_method :random, :zero or :supplied
