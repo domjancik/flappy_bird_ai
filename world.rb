@@ -7,7 +7,8 @@ module RFlappy
       # @param [Fixnum]
       # @return [Fixnum]
       attr_accessor :gravity, :speed, :flap_velocity, :pipe_hole_size, :delay_between_pipes, :pipe_hole_leeway,
-                    :delay_between_pso, :pso_inertia, :pso_local_best_influence, :pso_global_best_influence
+                    :delay_between_pso, :pso_inertia, :pso_local_best_influence, :pso_global_best_influence,
+                    :mutation_on_death
     end
 
     # World settings, editable realtime
@@ -22,6 +23,8 @@ module RFlappy
     @pso_inertia = 0.5
     @pso_local_best_influence = 0.25
     @pso_global_best_influence = 0.25
+
+    @mutation_on_death = 0.2
 
     @game = nil
   end

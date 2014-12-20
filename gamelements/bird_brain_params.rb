@@ -40,6 +40,12 @@ module RFlappy
         init_zero_params if init_method == :zero
       end
 
+      def mutate
+        random_params = RFlappy::GameElements::BirdBrainParams.new(:random)
+        new_params = self * (1.0 - RFlappy::World.mutation_on_death) + random_params * RFlappy::World.mutation_on_death
+        @params = new_params.params
+      end
+
       # @param [String] name
       # @param [Array] args
       def method_missing(name, *args)

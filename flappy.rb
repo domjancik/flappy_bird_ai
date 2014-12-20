@@ -11,6 +11,32 @@ module RFlappy
   class Game < Gosu::Window
     attr_reader :width, :height, :pipes, :font, :total_fitness, :bird_ais
 
+    TEXT_COLOR = Gosu::Color::WHITE
+    TEXT_SELECTED_COLOR = Gosu::Color::YELLOW
+    TEXT_BG_COLOR = Gosu::Color.new(128, 0, 0, 0)
+
+    WORLD_PARAMS = [
+        ['gravity' , 'Gravity', {:lo => 1, :hi => 50}],
+        ['flap_velocity' , 'Flap Velocity', {:lo => 1, :hi => 50}],
+        ['speed' , 'Speed', {:lo => 1, :hi => 50}],
+        ['pipe_hole_size' , 'Pipe Hole Size', {:lo => 1, :hi => 50}],
+        ['pipe_hole_leeway' , 'Pipe Leeway', {:lo => 1, :hi => 50}],
+        ['delay_between_pipes' , 'Pipe Delay', {:lo => 0.1, :hi => 1}],
+        ['delay_between_pso' , 'PSO Delay', {:lo => 0.01, :hi => 0.1}],
+        ['pso_inertia' , 'PSO Inertia', {:lo => 0.01, :hi => 0.25}],
+        ['pso_local_best_influence' , 'PSO loc. infl', {:lo => 0.01, :hi => 0.25}],
+        ['pso_global_best_influence' , 'PSO glob. infl', {:lo => 0.01, :hi => 0.25}],
+        ['mutation_on_death' , 'Death mutation', {:lo => 0.01, :hi => 0.1}]
+    ]
+
+    def get_world_param(name)
+      world.send name
+    end
+
+    def set_world_param(name, val)
+      world.send (name + '='), val
+    end
+
     def world
       RFlappy::World
     end
@@ -37,8 +63,45 @@ module RFlappy
       @total_fitness = 0
 
       @font = Gosu::Font.new(self, 'Arial', 20)
+      @selected_param = 0
 
       (0..20).each { spawn_ai_bird }
+    end
+
+    def select_next_param
+      @selected_param = (@selected_param + 1) % WORLD_PARAMS.size
+    end
+
+    def select_previous_param
+      @selected_param = @selected_param > 0 ? (@selected_param - 1) : WORLD_PARAMS.size - 1
+    end
+
+    def selected_param_id
+      WORLD_PARAMS[@selected_param][0]
+    end
+
+    def modify_selected_param(by)
+      id = selected_param_id
+      set_world_param(id, get_world_param(id) + by)
+    end
+
+# @param [Symbol] how_much :lo or :hi
+# @param [Symbol] direction :add or :sub
+    def edit_selected_param(how_much, direction)
+      amount = WORLD_PARAMS[@selected_param][2][how_much]
+      direction == :add ? modify_selected_param(amount) : modify_selected_param(-amount)
+    end
+
+    def add_selected_param(how_much)
+      edit_selected_param how_much, :add
+    end
+
+    def subtract_selected_param(how_much)
+      edit_selected_param how_much, :subtract
+    end
+
+    def draw_rectangle(ax, ay, bx, by, color)
+      draw_quad(ax, ay, color, bx, ay, color, bx, by, color, ax, by, color)
     end
 
     def draw
@@ -46,7 +109,22 @@ module RFlappy
 
       @all.each { | group | group.each { | object | object.draw } }
 
+      # Info
       font.draw('Max score ' + @max_score.to_s, 10, 10, 0)
+
+      param_idx = 0
+      WORLD_PARAMS.each_index do |id|
+        x = 10 + 200 * (param_idx % 6)
+        line = (param_idx / 6)
+        y = height - 80 + 30 * line
+
+        color = @selected_param == id ? TEXT_SELECTED_COLOR : TEXT_COLOR
+        param_name = WORLD_PARAMS[id][1]
+        param_id = WORLD_PARAMS[id][0]
+        draw_rectangle(x - 5, y - 5, x + 190, y + 23, TEXT_BG_COLOR)
+        font.draw(param_name + ': ' + get_world_param(param_id).to_s, x, y, 0, 1, 1, color)
+        param_idx += 1
+      end
     end
 
     # this is a callback for key up events or equivalent (there are
@@ -57,8 +135,16 @@ module RFlappy
 
     def button_down(key)
       @birds[0].flap if key == Gosu::KbSpace
-      world.pipe_hole_size += 50 if key == Gosu::KbUp
-      world.pipe_hole_size = [0, world.pipe_hole_size - 50].max if key == Gosu::KbDown
+
+      add_selected_param(:lo) if key == Gosu::KbUp
+      add_selected_param(:hi) if key == Gosu::KbPageUp
+
+      subtract_selected_param(:lo) if key == Gosu::KbDown
+      subtract_selected_param(:hi) if key == Gosu::KbPageDown
+
+      select_next_param if key == Gosu::KbRight
+      select_previous_param if key == Gosu::KbLeft
+
       spawn_ai_bird if key == Gosu::KbQ
     end
 

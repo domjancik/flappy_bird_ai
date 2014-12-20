@@ -14,9 +14,12 @@ module RFlappy
       include RFlappy::GameElements::Draw::Image
 
       attr_reader :distance, :score
+      # @param [Block] on_die
+      attr_writer :on_die
 
-      def initialize
+      def initialize(on_die = lambda {})
         super(RFlappy::GameElements::Dimensions.new(100,0,68,48))
+        @on_die = on_die
         die
 
         init_velocity
@@ -62,6 +65,8 @@ module RFlappy
       def die
         reset_score
         respawn
+
+        @on_die.call
       end
 
       def reset_score

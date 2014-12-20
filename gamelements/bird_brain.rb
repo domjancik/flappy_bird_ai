@@ -11,6 +11,7 @@ module RFlappy
       # @param [RFlappy::GameElements::Bird] bird_to_control
       def initialize(bird_to_control, id)
         @bird = bird_to_control
+        @bird.on_die = lambda { mutate_params }
         @id = id
         @best = nil
 
@@ -19,6 +20,10 @@ module RFlappy
 
         reset_flap_delay
         reset_pso_delay
+      end
+
+      def mutate_params
+        @params.mutate
       end
 
       def reset_flap_delay
@@ -35,13 +40,13 @@ module RFlappy
 
       # Target threshold modified by current distance to pipe
       def actual_target_threshold
-        p distance_to_next_pipe if @id == 0
         [(@params.target_threshold * distance_to_next_pipe * 0.002), @params.target_threshold].min
         # TODO parametrise the distance multiplier
       end
 
       def target_height
-        next_pipe.y_center + @params.target_offset
+        pipe = next_pipe
+        pipe.nil? ? 400 + @params.target_offset : next_pipe.y_center + @params.target_offset
       end
 
       def below_target?
@@ -147,7 +152,7 @@ module RFlappy
       end
 
       def dist_to_pipe(pipe)
-        pipe.dims.x - @bird.dims.x
+        pipe.nil? ? 0 : pipe.dims.x - @bird.dims.x
       end
 
       def next_pipe
