@@ -122,7 +122,7 @@ module RFlappy
 
       param_idx = 0
       WORLD_PARAMS.each_index do |id|
-        x = 10 + 200 * (param_idx % 6)
+        x = 40 + 200 * (param_idx % 6)
         line = (param_idx / 6)
         y = height - 80 + 30 * line
 
