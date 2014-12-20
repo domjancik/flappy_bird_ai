@@ -81,9 +81,13 @@ module RFlappy
       WORLD_PARAMS[@selected_param][0]
     end
 
+    def set_selected_param(val)
+      set_world_param(selected_param_id, val)
+    end
+
     def modify_selected_param(by)
       id = selected_param_id
-      set_world_param(id, get_world_param(id) + by)
+      set_selected_param(get_world_param(id) + by)
     end
 
 # @param [Symbol] how_much :lo or :hi
@@ -113,6 +117,9 @@ module RFlappy
       # Info
       font.draw('Max score ' + @max_score.to_s, 10, 10, 0)
 
+      global_best = RFlappy::GameElements::BirdBrain.best
+      font.draw('Global best ' + global_best.fitness.round(3).to_s, 10, 40, 0) unless global_best.nil?
+
       param_idx = 0
       WORLD_PARAMS.each_index do |id|
         x = 10 + 200 * (param_idx % 6)
@@ -123,7 +130,7 @@ module RFlappy
         param_name = WORLD_PARAMS[id][1]
         param_id = WORLD_PARAMS[id][0]
         draw_rectangle(x - 5, y - 5, x + 190, y + 23, TEXT_BG_COLOR)
-        font.draw(param_name + ': ' + get_world_param(param_id).to_s, x, y, 0, 1, 1, color)
+        font.draw(param_name + ': ' + get_world_param(param_id).round(3).to_s, x, y, 0, 1, 1, color)
         param_idx += 1
       end
     end
@@ -143,10 +150,21 @@ module RFlappy
       subtract_selected_param(:lo) if key == Gosu::KbDown
       subtract_selected_param(:hi) if key == Gosu::KbPageDown
 
+      RFlappy::GameElements::BirdBrain.reset_global_best if key == Gosu::KbR
+
       select_next_param if key == Gosu::KbRight
       select_previous_param if key == Gosu::KbLeft
 
-      spawn_ai_bird if key == Gosu::KbQ
+      set_selected_param 0.0 if key == Gosu::KbLeftControl
+      set_selected_param 0.1 if key == Gosu::Kb1
+      set_selected_param 0.2 if key == Gosu::Kb2
+      set_selected_param 0.3 if key == Gosu::Kb3
+      set_selected_param 0.4 if key == Gosu::Kb4
+      set_selected_param 0.5 if key == Gosu::Kb5
+      set_selected_param 0.6 if key == Gosu::Kb6
+      set_selected_param 0.7 if key == Gosu::Kb7
+      set_selected_param 0.8 if key == Gosu::Kb8
+      set_selected_param 0.9 if key == Gosu::Kb9
     end
 
     def update

@@ -6,6 +6,16 @@ module RFlappy
     class BirdBrain
       attr_reader :params
 
+      class << self
+        def best
+          @@best
+        end
+
+        def reset_global_best
+          @@best = nil
+        end
+      end
+
       @@best = nil
 
       def best_live_ai
