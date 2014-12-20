@@ -107,8 +107,11 @@ module RFlappy
         # TODO draw lines representing target, threshold, etc.
         font.draw(@id.to_s, @bird.dims.x - 70, @bird.dims.y, 0)
         target_line_x = @bird.dims.x + 50 * (@id + 1)
-        game.draw_line(@bird.dims.x + 30, @bird.dims.y, Gosu::Color::WHITE, target_line_x, target_height, Gosu::Color::RED)
-        game.draw_line(target_line_x, target_height, Gosu::Color::RED, target_line_x + 50, target_height, Gosu::Color::RED)
+
+        color = best_fitness? ? Gosu::Color::YELLOW : Gosu::Color::RED
+
+        game.draw_line(@bird.dims.x + 30, @bird.dims.y, Gosu::Color::WHITE, target_line_x, target_height, color)
+        game.draw_line(target_line_x, target_height, color, target_line_x + 50, target_height, color)
 
         game.draw_line(target_line_x, target_height, Gosu::Color::WHITE, target_line_x, target_height + @params.target_threshold, Gosu::Color::WHITE)
         game.draw_line(target_line_x, target_height, Gosu::Color::BLACK, target_line_x, target_height + actual_target_threshold, Gosu::Color::BLACK)

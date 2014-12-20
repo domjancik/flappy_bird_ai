@@ -118,7 +118,7 @@ module RFlappy
       font.draw('Max score ' + @max_score.to_s, 10, 10, 0)
 
       global_best = RFlappy::GameElements::BirdBrain.best
-      font.draw('Global best ' + global_best.fitness.round(3).to_s, 10, 40, 0) unless global_best.nil?
+      font.draw('Global best (R to reset): ' + global_best.fitness.round(3).to_s, 10, 40, 0) unless global_best.nil?
 
       param_idx = 0
       WORLD_PARAMS.each_index do |id|
