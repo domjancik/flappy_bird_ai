@@ -183,6 +183,7 @@ module RFlappy
         @velocity = inertia_part + local_best_part + global_best_part + live_best_part
 
         @params += @velocity
+        @params.validate
 
         update_best!
         reset_pso_delay

@@ -9,6 +9,10 @@ module RFlappy
       @to = to
     end
 
+    def limit(val)
+      [[val, from].max, to].min
+    end
+
     ZERO_ONE = RFlappy::Interval.new(0, 1)
   end
 end

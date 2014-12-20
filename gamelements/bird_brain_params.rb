@@ -18,6 +18,14 @@ module RFlappy
         RFlappy::RandomHelper.rand_interval(interval)
       end
 
+      def validate
+        self.target_offset = TARGET_INTERVAL.limit(self.target_offset)
+        self.target_threshold = TARGET_INTERVAL.limit(self.target_threshold)
+        self.jump_delay = TARGET_INTERVAL.limit(self.jump_delay)
+        self.dist_thresh_mult = TARGET_INTERVAL.limit(self.dist_thresh_mult)
+        self.retarget_speed = TARGET_INTERVAL.limit(self.retarget_speed)
+      end
+
       def init_random_params
         self.target_offset = rand_interval(TARGET_INTERVAL) # aim of the bird
         self.target_threshold = rand_interval(TARGET_THRESHOLD_INTERVAL) # distance from target before flapping
