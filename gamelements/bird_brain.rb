@@ -48,6 +48,7 @@ module RFlappy
 
       def mutate_params
         @params.mutate
+        @params.validate
       end
 
       def reset_flap_delay
