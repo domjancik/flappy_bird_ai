@@ -62,8 +62,7 @@ module RFlappy
 
       # Target threshold modified by current distance to pipe
       def actual_target_threshold
-        [(@params.target_threshold * distance_to_next_pipe * 0.002), @params.target_threshold].min
-        # TODO parametrise the distance multiplier
+        [(@params.target_threshold * distance_to_next_pipe * @params.dist_thresh_mult), @params.target_threshold].min
       end
 
       def target_height
@@ -73,7 +72,6 @@ module RFlappy
 
       def below_target?
         bird_y > target_height + actual_target_threshold
-        # TODO threshold has to be affected by speed otherwise it's just moving target
       end
 
       def should_flap?
@@ -103,6 +101,10 @@ module RFlappy
         update_best!
       end
 
+      def actual_target_height
+        target_height + actual_target_threshold
+      end
+
       def draw
         # TODO draw lines representing target, threshold, etc.
         font.draw(@id.to_s, @bird.dims.x - 70, @bird.dims.y, 0)
@@ -112,9 +114,10 @@ module RFlappy
 
         game.draw_line(@bird.dims.x + 30, @bird.dims.y, Gosu::Color::WHITE, target_line_x, target_height, color)
         game.draw_line(target_line_x, target_height, color, target_line_x + 50, target_height, color)
+        game.draw_line(target_line_x, actual_target_height, color, target_line_x + 25, actual_target_height, color)
 
         game.draw_line(target_line_x, target_height, Gosu::Color::WHITE, target_line_x, target_height + @params.target_threshold, Gosu::Color::WHITE)
-        game.draw_line(target_line_x, target_height, Gosu::Color::BLACK, target_line_x, target_height + actual_target_threshold, Gosu::Color::BLACK)
+        game.draw_line(target_line_x, target_height, Gosu::Color::BLACK, target_line_x, actual_target_height, Gosu::Color::BLACK)
 
         game.draw_line(target_line_x, target_height + 10, Gosu::Color::WHITE, target_line_x + @params.jump_delay * 20, target_height + 10, Gosu::Color::WHITE)
         game.draw_line(target_line_x, target_height + 10, Gosu::Color::BLACK, target_line_x + @time_to_flap * 20, target_height + 10, Gosu::Color::BLACK)
