@@ -35,6 +35,7 @@ module RFlappy
 
       # Target threshold modified by current distance to pipe
       def actual_target_threshold
+        p distance_to_next_pipe if @id == 0
         [(@params.target_threshold * distance_to_next_pipe * 0.002), @params.target_threshold].min
         # TODO parametrise the distance multiplier
       end
@@ -154,7 +155,7 @@ module RFlappy
         pipe_with_min_dist = nil
         game.pipes.each do |pipe|
           pipe_dist = dist_to_pipe pipe
-          if pipe_with_min_dist.nil? || (pipe.dims.x > @bird.dims.x && pipe_dist < min_dist_to_pipe)
+          if pipe.dims.x > @bird.dims.x && pipe_dist < min_dist_to_pipe && pipe_dist > 0
             min_dist_to_pipe = pipe_dist
             pipe_with_min_dist = pipe
           end
