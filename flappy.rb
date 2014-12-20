@@ -26,6 +26,7 @@ module RFlappy
         ['pso_inertia' , 'PSO Inertia', {:lo => 0.01, :hi => 0.25}],
         ['pso_local_best_influence' , 'PSO loc. infl', {:lo => 0.01, :hi => 0.25}],
         ['pso_global_best_influence' , 'PSO glob. infl', {:lo => 0.01, :hi => 0.25}],
+        ['pso_live_best_influence' , 'PSO live best infl', {:lo => 0.01, :hi => 0.25}],
         ['mutation_on_death' , 'Death mutation', {:lo => 0.01, :hi => 0.1}]
     ]
 

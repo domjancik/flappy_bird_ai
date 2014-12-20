@@ -4,7 +4,19 @@ require_relative 'bird_brain_classified_params'
 module RFlappy
   module GameElements
     class BirdBrain
+      attr_reader :params
+
       @@best = nil
+
+      def best_live_ai
+        game.bird_ais.inject(self) do |known_best, bird_ai|
+          bird_ai.fitness > known_best.fitness ? bird_ai : known_best
+        end
+      end
+
+      def best_live_params
+        best_live_ai.params
+      end
 
       ZERO_PARAMS = RFlappy::GameElements::BirdBrainParams::ZERO
 
@@ -137,12 +149,14 @@ module RFlappy
       def iterate_pso
         alpha = RFlappy::RandomHelper.rand_interval(RFlappy::Interval::ZERO_ONE)
         beta = RFlappy::RandomHelper.rand_interval(RFlappy::Interval::ZERO_ONE)
+        gamma = RFlappy::RandomHelper.rand_interval(RFlappy::Interval::ZERO_ONE)
 
         inertia_part = @velocity * world.pso_inertia
         local_best_part = @best.nil? ? ZERO_PARAMS : (@best.params - @params) * alpha * world.pso_local_best_influence
         global_best_part = @@best.nil? ? ZERO_PARAMS : (@@best.params - @params) * beta * world.pso_global_best_influence
+        live_best_part = (best_live_params - @params) * gamma * world.pso_live_best_influence
 
-        @velocity = inertia_part + local_best_part + global_best_part
+        @velocity = inertia_part + local_best_part + global_best_part + live_best_part
 
         @params += @velocity
 
