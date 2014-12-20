@@ -136,7 +136,7 @@ module RFlappy
         #@bird.distance
         return 0 if @bird.score < 2
 
-        @bird.score + @bird.distance * 0.0001
+        Math::log(@bird.score + @bird.distance * 0.0001)
       end
 
       # @return [RFlappy::GameElements::BirdBrainClassifiedParams]
@@ -216,6 +216,7 @@ module RFlappy
       def randomize
         @best = nil
         @params.init_random_params
+        @bird.die
       end
 
       def world

@@ -12,7 +12,7 @@ module RFlappy
       TARGET_THRESHOLD_INTERVAL = Interval.new(0, 200)
       JUMP_DELAY_INTERVAL = Interval.new(0, 2)
       DIST_THRESH_MULT_INTERVAL = Interval.new(0.0001, 0.003)
-      RETARGET_SPEED_INTERVAL = Interval.new(0.1, 1)
+      RETARGET_SPEED_INTERVAL = Interval.new(0.001, 1)
 
       def rand_interval(interval)
         RFlappy::RandomHelper.rand_interval(interval)

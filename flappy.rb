@@ -139,6 +139,10 @@ module RFlappy
       @bird_ais.each { |bird_ai| bird_ai.randomize }
     end
 
+    def randomize_ai
+      @bird_ais[rand(@bird_ais.size)].randomize
+    end
+
     # this is a callback for key up events or equivalent (there are
     # constants for gamepad buttons and mouse clicks)
     def button_up(key)
@@ -156,6 +160,7 @@ module RFlappy
 
       RFlappy::GameElements::BirdBrain.reset_global_best if key == Gosu::KbR
       randomize_ais if key == Gosu::KbA
+      randomize_ai if key == Gosu::KbS
 
       select_next_param if key == Gosu::KbRight
       select_previous_param if key == Gosu::KbLeft
