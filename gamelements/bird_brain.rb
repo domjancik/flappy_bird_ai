@@ -211,6 +211,11 @@ module RFlappy
         dist_to_pipe(next_pipe).abs
       end
 
+      def randomize
+        @best = nil
+        @params.init_random_params
+      end
+
       def world
         RFlappy::World
       end

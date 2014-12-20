@@ -90,8 +90,8 @@ module RFlappy
       set_selected_param(get_world_param(id) + by)
     end
 
-# @param [Symbol] how_much :lo or :hi
-# @param [Symbol] direction :add or :sub
+    # @param [Symbol] how_much :lo or :hi
+    # @param [Symbol] direction :add or :sub
     def edit_selected_param(how_much, direction)
       amount = WORLD_PARAMS[@selected_param][2][how_much]
       direction == :add ? modify_selected_param(amount) : modify_selected_param(-amount)
@@ -135,6 +135,10 @@ module RFlappy
       end
     end
 
+    def randomize_ais
+      @bird_ais.each { |bird_ai| bird_ai.randomize }
+    end
+
     # this is a callback for key up events or equivalent (there are
     # constants for gamepad buttons and mouse clicks)
     def button_up(key)
@@ -151,6 +155,7 @@ module RFlappy
       subtract_selected_param(:hi) if key == Gosu::KbPageDown
 
       RFlappy::GameElements::BirdBrain.reset_global_best if key == Gosu::KbR
+      randomize_ais if key == Gosu::KbA
 
       select_next_param if key == Gosu::KbRight
       select_previous_param if key == Gosu::KbLeft
