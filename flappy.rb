@@ -155,7 +155,7 @@ module RFlappy
       select_next_param if key == Gosu::KbRight
       select_previous_param if key == Gosu::KbLeft
 
-      set_selected_param 0.0 if key == Gosu::KbLeftControl
+      set_selected_param 0.0 if key == Gosu::Kb0
       set_selected_param 0.1 if key == Gosu::Kb1
       set_selected_param 0.2 if key == Gosu::Kb2
       set_selected_param 0.3 if key == Gosu::Kb3
